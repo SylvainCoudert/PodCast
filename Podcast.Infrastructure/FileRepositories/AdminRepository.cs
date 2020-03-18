@@ -38,10 +38,13 @@ namespace Podcast.Infrastructure.FileRepositories
             {
                 using (var fileStream = File.OpenText(SaveFileName))
                 {
-                    var playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto));
-                    var episodes = playlist.Episodes.Concat(new[] { dtoToSave }).ToArray();
-                    majedPlaylist = new PlaylistDto { Episodes = episodes };
+                    var playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto)) ?? new PlaylistDto();
+
+                    var existingEpisodes = playlist.Episodes ?? new EpisodeDto[0];
+                    var concatenedEpisodes = existingEpisodes.Concat(new[] { dtoToSave }).ToArray();
+                    majedPlaylist = new PlaylistDto { Episodes = concatenedEpisodes };
                 }
+
                 File.Delete(SaveFileName);
             }
             else
