@@ -1,4 +1,7 @@
-﻿Pour paramétrer pour une école, ouvrir le fichier Podcast.Web\Constantes.cs :
+Cette appli permet aux enseignants de publier un podcast quotidien pour leurs élèves.
+Sans BDD, ça se veut simple et léger pour la période de confinement. 
+ 
+Pour paramétrer pour une école, ouvrir le fichier Podcast.Web\Constantes.cs :
 - Le "mot de passe" est à passer en url pour que le prof puisse uploader (sécu en carton, c'est juste pour bloquer les ptits malins de moins de 10 ans)
 - Une photo de l'école dans le dossier wwwroot/content
 
