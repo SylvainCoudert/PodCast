@@ -23,6 +23,9 @@ namespace Podcast.Infrastructure.FileRepositories
                 JsonSerializer serializer = new JsonSerializer();
                 var playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto));
 
+                if (playlist == null)
+                    return Task.FromResult(new PlayList(new Episode[0]));
+
                 var filterPlayList = new PlaylistDto { Episodes = playlist.Episodes.Where(e => e.DatePublication <= DateTime.Today.AddDays(1).AddMinutes(-1)).ToArray() };
                 return Task.FromResult(filterPlayList.ToPlayList());
             }
