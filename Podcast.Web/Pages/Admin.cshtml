@@ -25,23 +25,31 @@
     </fieldset>
     <div class="form-group row">
         <div class="col-sm-10">
-            <input type="submit" class="btn btn-primary"/>
+            <input type="submit" class="btn btn-primary" />
         </div>
     </div>
 </form>
 
-<h2>Episodes déjà enregistrés</h2>
-<div id="playlist">
-    @foreach (var episode in Model.Playlist.Episodes)
-    {
-        <div class="episode">
-            <figure>
-                <figcaption>@episode.TitreEpisode</figcaption>
-                <p>Date publication : @episode.DatePublication</p>
-                <audio controls src="@($"/Content/Audio/{episode.NomEpisode}.mp3")" style="margin-top:3px;">
-                    Votre navigateur ne supporte pas l'élément <code>audio</code>.
-                </audio>
-            </figure>
-        </div>
-    }
-</div>
+@if (Model.Playlist.Episodes.Count() == 0)
+{
+    <h2>Aucun épisode pour le moment.</h2>
+}
+else
+{
+    <h2>Episodes déjà enregistrés</h2>
+    <div id="playlist">
+        @foreach (var episode in Model.Playlist.Episodes)
+        {
+            <div class="episode">
+                <figure>
+                    <figcaption>@episode.TitreEpisode</figcaption>
+                    <p>Date publication : @episode.DatePublication</p>
+                    <audio controls src="@($"/Content/Audio/{episode.NomEpisode}.mp3")" style="margin-top:3px;">
+                        Votre navigateur ne supporte pas l'élément
+                        <code>audio</code>.
+                    </audio>
+                </figure>
+            </div>
+        }
+    </div>
+}
