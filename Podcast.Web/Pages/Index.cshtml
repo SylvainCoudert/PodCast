@@ -10,18 +10,28 @@
         <p>Bienvenue sur le podcast des @Constantes.NomEcoleNiveau!</p>
     </div>
     <div>
-        <img src="@($"/Content/{Constantes.PhotoEcole}")" style="float:left;"/>
+        <img src="@($"/Content/{Constantes.PhotoEcole}")" style="float:left;" />
     </div>
-    @foreach (var episode in Model.Playlist.Episodes)
+    @if (Model.Playlist.Episodes.Count() == 0)
     {
-        <div class="episode">
-            <figure>
-                <figcaption>@episode.TitreEpisode</figcaption>
-                <a href="@($"/Content/Audio/{episode.NomEpisode}.mp3")" download>Télécharger</a><br />
-                <audio controls src="@($"/Content/Audio/{episode.NomEpisode}.mp3")" style="margin-top:3px;">
-                    Votre navigateur ne supporte pas l'élément <code>audio</code>.
-                </audio>
-            </figure>
+        <div>
+            Aucune playlist ou épisode à afficher pour le moment.
         </div>
+    }
+    else
+    {
+        @foreach (var episode in Model.Playlist.Episodes)
+        {
+            <div class="episode">
+                <figure>
+                    <figcaption>@episode.TitreEpisode</figcaption>
+                    <a href="@($"/Content/Audio/{episode.NomEpisode}.mp3")" download>Télécharger</a><br />
+                    <audio controls src="@($"/Content/Audio/{episode.NomEpisode}.mp3")" style="margin-top:3px;">
+                        Votre navigateur ne supporte pas l'élément
+                        <code>audio</code>.
+                    </audio>
+                </figure>
+            </div>
+        }
     }
 </div>
