@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Podcast.Domain;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Podcast.Web.Pages
 {
@@ -17,8 +15,10 @@ namespace Podcast.Web.Pages
 
         [BindProperty(Name = "title")]
         public string TitreEpisode { get; set; }
+
         [BindProperty(Name = "datePubli")]
         public DateTime DatePublication { get; set; }
+
         [BindProperty]
         public IFormFile Upload { get; set; }
 
@@ -38,12 +38,16 @@ namespace Podcast.Web.Pages
 
         public async Task OnPostAsync()
         {
-            var file = Path.Combine(_environment.WebRootPath, "Content\\Audio", Upload.FileName);
-            
-            using (var fileStream = new FileStream(file, FileMode.Create))            
+            var audioDir = Path.Combine(_environment.WebRootPath, "Content\\Audio");
+            var file = Path.Combine(audioDir, Upload.FileName);
+
+            if (!Directory.Exists(audioDir))
+                Directory.CreateDirectory(audioDir);
+
+            using (var fileStream = new FileStream(file, FileMode.Create))
             {
                 await Upload.CopyToAsync(fileStream);
-                await _adminRepository.PublishEpisode(new Episode(new EpisodeName(Upload.FileName.Replace(".mp3","")), new EpisodeTitle(TitreEpisode), new PublicationDate(DatePublication)));
+                await _adminRepository.PublishEpisode(new Episode(new EpisodeName(Upload.FileName.Replace(".mp3", "")), new EpisodeTitle(TitreEpisode), new PublicationDate(DatePublication)));
             }
             RetrievePlaylist();
         }
