@@ -51,7 +51,7 @@ namespace Podcast.Web.Pages
         private void RetrievePlaylist()
         {
             var getParam = Request.Query["pass"];
-            if (getParam != Constantes.MotDePasseAdminEnseignant) throw new UnauthorizedAccessException("Bien messayé!");
+            if (getParam != Constantes.MotDePasseAdminEnseignant) throw new UnauthorizedAccessException("Bien essayé !");
             Playlist = _adminRepository.LoadAllEpisodes().GetAwaiter().GetResult();
         }
     }
