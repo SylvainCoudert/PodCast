@@ -1,9 +1,9 @@
-﻿using Podcast.Domain;
+﻿using Newtonsoft.Json;
+using Podcast.Domain;
+using Podcast.Infrastructure.Dtos;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.IO;
-using Podcast.Infrastructure.Dtos;
 
 namespace Podcast.Infrastructure.FileRepositories
 {
@@ -11,7 +11,6 @@ namespace Podcast.Infrastructure.FileRepositories
     {
         public AdminRepository(string connectionString) : base(connectionString)
         {
-
         }
 
         public Task<PlayList> LoadAllEpisodes()
@@ -22,6 +21,9 @@ namespace Podcast.Infrastructure.FileRepositories
             {
                 JsonSerializer serializer = new JsonSerializer();
                 PlaylistDto playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto));
+
+                if (playlist == null)
+                    return Task.FromResult(new PlayList(new Episode[0]));
 
                 return Task.FromResult(playlist.ToPlayList());
             }
@@ -36,10 +38,13 @@ namespace Podcast.Infrastructure.FileRepositories
             {
                 using (var fileStream = File.OpenText(SaveFileName))
                 {
-                    var playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto));
-                    var episodes = playlist.Episodes.Concat(new[] { dtoToSave }).ToArray();
-                    majedPlaylist = new PlaylistDto { Episodes = episodes };
+                    var playlist = (PlaylistDto)serializer.Deserialize(fileStream, typeof(PlaylistDto)) ?? new PlaylistDto();
+
+                    var existingEpisodes = playlist.Episodes ?? new EpisodeDto[0];
+                    var concatenedEpisodes = existingEpisodes.Concat(new[] { dtoToSave }).ToArray();
+                    majedPlaylist = new PlaylistDto { Episodes = concatenedEpisodes };
                 }
+
                 File.Delete(SaveFileName);
             }
             else
