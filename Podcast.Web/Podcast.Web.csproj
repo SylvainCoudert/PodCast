@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Podcast.Domain\Podcast.Domain.csproj" />
+    <ProjectReference Include="..\Podcast.Infrastructure\Podcast.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Content\Audio\" />
+  </ItemGroup>
+
+
+
+</Project>
